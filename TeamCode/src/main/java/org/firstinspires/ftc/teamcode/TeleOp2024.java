@@ -2,27 +2,24 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.mecanumdrive.DriveTrain;
-import org.firstinspires.ftc.teamcode.robotParts.Arm;
-
-import org.firstinspires.ftc.teamcode.robotParts.Claw;
-import org.firstinspires.ftc.teamcode.robotParts.Intake;
+import org.firstinspires.ftc.teamcode.Boom;
+import org.firstinspires.ftc.teamcode.Slide;
+//import org.firstinspires.ftc.teamcode.Intake;
 
 @TeleOp(name = "Alpha", group = "competition")
-public class TeleOpAlpha extends OpMode {
+public class TeleOp2024 extends OpMode {
     DriveTrain drive;
-    Arm arm;
-    //    Claw claw;
-    Intake intake;
+    Boom boom;
+    Slide slide;
+    //Intake intake;
 
     boolean doneInit = false;
 
     boolean pastBack = false;
-    boolean currentBack;
-    boolean pastA = false;
-    boolean currentA;
+    //boolean currentBack;
+    //boolean pastA = false;
+    //boolean currentA;
     boolean pastB = false;
     boolean currentB;
     boolean pastD_Up = false;
@@ -44,15 +41,15 @@ public class TeleOpAlpha extends OpMode {
     public void start() {
         while(!doneInit){}
 //        claw.close();
-        intake.setState("off");
+        //intake.setState("off");
     }
 
     @Override
     public void init() {
         drive = new DriveTrain(hardwareMap, "fl", "fr", "bl", "br");
-//        arm = new Arm(hardwareMap, "am1", "am2", 10, 1100, 0.05);
-//        claw = new Claw(hardwareMap, "claw", 50, 250);
-        intake = new Intake(hardwareMap, "intMotor");
+        boom = new Boom(hardwareMap, "am1", 10, 1100, 0.05);
+        slide = new Slide(hardwareMap, "am2", 10, 1100, 0.05);
+        //intake = new Intake(hardwareMap, "intMotor");
         doneInit = true;
     }
 
@@ -72,23 +69,33 @@ public class TeleOpAlpha extends OpMode {
         drive.normalizePowers();
         drive.pushPowers();
 
-        currentD_Up = gamepad1.dpad_up;
+       currentD_Up = gamepad1.dpad_up;
         if(currentD_Up && !pastD_Up) {
-            intake.setState("outputting");
+            slide.movePower(true);
+        }else{
+            slide.stop();
         }
         pastD_Up = currentD_Up;
 
         currentD_Down = gamepad1.dpad_down;
         if(currentD_Down && !pastD_Down) {
-            intake.setState("intaking");
+            slide.movePower(false);
+        }else{
+            slide.stop();
         }
         pastD_Down = currentD_Down;
-
-        currentD_Right = gamepad1.dpad_right;
-        if(currentD_Right && !pastD_Right) {
-            intake.setState("off");
-        }
-        pastD_Right = currentD_Right;
+//
+//        currentD_Down = gamepad1.dpad_down;
+//        if(currentD_Down && !pastD_Down) {
+//            intake.setState("intaking");
+//        }
+//        pastD_Down = currentD_Down;
+//
+//        currentD_Right = gamepad1.dpad_right;
+//        if(currentD_Right && !pastD_Right) {
+//            intake.setState("off");
+//        }
+//        pastD_Right = currentD_Right;
 //
 //        currentA = gamepad1.a;
 //        if(currentA && !pastA) {
@@ -105,18 +112,18 @@ public class TeleOpAlpha extends OpMode {
             currentLeftTrigger = true;
         }
 
-//        if(currentRightTrigger) {
-//            arm.movePower(true);
-//        }
-//        else if(currentLeftTrigger) {
-//            arm.movePower(false);
-//        }
-//
-//        if(!(currentLeftTrigger || currentRightTrigger)) {
-//            if(!pastTriggered) {
-//                arm.stop();
-//            }
-//        }
+        if(currentRightTrigger) {
+            boom.movePower(true);
+        }
+        else if(currentLeftTrigger) {
+            boom.movePower(false);
+        }
+
+        if(!(currentLeftTrigger || currentRightTrigger)) {
+            if(!pastTriggered) {
+                boom.stop();
+            }
+        }
 
         pastTriggered = currentRightTrigger || currentLeftTrigger;
         currentRightTrigger = false;
@@ -126,7 +133,8 @@ public class TeleOpAlpha extends OpMode {
     @Override
     public void stop() {
         drive.stop();
-//        arm.stop();
-        intake.setState("off");
+        boom.stop();
+        slide.stop();
+        //intake.setState("off");
     }
 }
