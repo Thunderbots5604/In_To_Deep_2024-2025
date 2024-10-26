@@ -62,7 +62,7 @@ public class TeleOp2024 extends OpMode {
         }
         pastB = currentB;
 
-        multiplier = halfSpeed ? 0.25 : 0.5;
+        multiplier = halfSpeed ? 0.1 : 0.3;
 
         drive.setPowersToZero();
         drive.calculatePower(new double[] {multiplier * gamepad1.left_stick_x, -multiplier * gamepad1.left_stick_y, multiplier * gamepad1.right_stick_x});

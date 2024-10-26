@@ -11,8 +11,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 public class BlueClose extends LinearOpMode{
     private AutoDriveTrain drive;
-    //private Arm arm;
-    //    private Intake intake;
+    private Boom boom;
+    private Slide slide;
 //    private Claw claw;
     //private Camera camera;
     private int location;
@@ -22,7 +22,8 @@ public class BlueClose extends LinearOpMode{
     @Override
     public void runOpMode() {
         drive = new AutoDriveTrain(hardwareMap, "fl", "fr", "bl", "br", new double[] {Values.LATERAL_ERROR, Values.LONGITUDINAL_ERROR, Values.ANGLE_ERROR}, Values.INCHES_PER_TICK_LATERAL, Values.INCHES_PER_TICK_LONGITUDINAL, Values.RADIANS_PER_TICK);
-//        arm = new Arm(hardwareMap, "am1", "am2", 10, 1100, 0.05);
+        boom = new Boom(hardwareMap, "am1", 10, 1100, 0.05);
+        slide = new Slide(hardwareMap, "am1", 10, 1100, 0.05);
 //        claw = new Claw(hardwareMap, "servo", 0, 0, 0);
 //        intake = new Intake(hardwareMap, "intMotor");
         //camera = new Camera(hardwareMap, telemetry, this);
