@@ -2,10 +2,9 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-public class Boom {
+public class Arm {
     private DcMotorEx armMotor;
 
     private double positionModifier;
@@ -20,7 +19,7 @@ public class Boom {
     public final double TARGET_INCREMENT;
     public final double MAX_POSITION;
 
-    public Boom(HardwareMap map, String armName, double positionIncrement, double maxPosition, double powerIncrement) {
+    public Arm(HardwareMap map, String armName, double positionIncrement, double maxPosition, double powerIncrement) {
         armMotor = map.get(DcMotorEx.class, armName);
 
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -49,10 +48,10 @@ public class Boom {
 
     public void movePower(boolean direction){
         if(direction){
-            armMotor.setPower(0.3);
+            armMotor.setPower(0.5);
 
         } else {
-            armMotor.setPower(-0.3);
+            armMotor.setPower(-0.5);
 
         }
     }

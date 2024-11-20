@@ -3,14 +3,14 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.teamcode.Boom;
+import org.firstinspires.ftc.teamcode.Arm;
 import org.firstinspires.ftc.teamcode.Slide;
 //import org.firstinspires.ftc.teamcode.Intake;
 
 @TeleOp(name = "Alpha", group = "competition")
 public class TeleOp2024 extends OpMode {
     DriveTrain drive;
-    Boom boom;
+    Arm arm;
     Slide slide;
     //Intake intake;
 
@@ -47,7 +47,7 @@ public class TeleOp2024 extends OpMode {
     @Override
     public void init() {
         drive = new DriveTrain(hardwareMap, "fl", "fr", "bl", "br");
-        boom = new Boom(hardwareMap, "am1", 10, 1100, 0.05);
+        arm = new Arm(hardwareMap, "am1", 10, 1100, 0.05);
         slide = new Slide(hardwareMap, "am2", 10, 1100, 0.05);
         //intake = new Intake(hardwareMap, "intMotor");
         doneInit = true;
@@ -71,17 +71,17 @@ public class TeleOp2024 extends OpMode {
 
        currentD_Up = gamepad1.dpad_up;
         if(currentD_Up && !pastD_Up) {
-            slide.movePower(true);
+            arm.movePower(true);
         }else{
-            slide.stop();
+            arm.stop();
         }
         pastD_Up = currentD_Up;
 
         currentD_Down = gamepad1.dpad_down;
         if(currentD_Down && !pastD_Down) {
-            slide.movePower(false);
+            arm.movePower(false);
         }else{
-            slide.stop();
+            arm.stop();
         }
         pastD_Down = currentD_Down;
 //
@@ -107,21 +107,26 @@ public class TeleOp2024 extends OpMode {
         leftTriggerValue = gamepad1.left_trigger;
         if(rightTriggerValue > 0.5) {
             currentRightTrigger = true;
+            telemetry.addData("RT", gamepad1.right_trigger);
         }
         else if(leftTriggerValue > 0.5) {
             currentLeftTrigger = true;
+            telemetry.addData("LT", gamepad1.right_trigger);
         }
+//        } else {
+//            arm.stop();
+//        }
 
         if(currentRightTrigger) {
-            boom.movePower(true);
+            arm.movePower(true);
         }
         else if(currentLeftTrigger) {
-            boom.movePower(false);
+            arm.movePower(false);
         }
 
         if(!(currentLeftTrigger || currentRightTrigger)) {
             if(!pastTriggered) {
-                boom.stop();
+                arm.stop();
             }
         }
 
@@ -133,8 +138,8 @@ public class TeleOp2024 extends OpMode {
     @Override
     public void stop() {
         drive.stop();
-        boom.stop();
-        slide.stop();
+        arm.stop();
+//        slide.stop();
         //intake.setState("off");
     }
 }
