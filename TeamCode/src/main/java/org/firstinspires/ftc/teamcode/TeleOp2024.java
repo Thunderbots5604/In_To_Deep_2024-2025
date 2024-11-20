@@ -69,7 +69,7 @@ public class TeleOp2024 extends OpMode {
         drive.normalizePowers();
         drive.pushPowers();
 
-       currentD_Up = gamepad1.dpad_up;
+        currentD_Up = gamepad1.dpad_up;
         if(currentD_Up && !pastD_Up) {
             arm.movePower(true);
         }else{
@@ -111,7 +111,7 @@ public class TeleOp2024 extends OpMode {
         }
         else if(leftTriggerValue > 0.5) {
             currentLeftTrigger = true;
-            telemetry.addData("LT", gamepad1.right_trigger);
+            telemetry.addData("LT", gamepad1.left_trigger);
         }
 //        } else {
 //            arm.stop();
@@ -133,6 +133,8 @@ public class TeleOp2024 extends OpMode {
         pastTriggered = currentRightTrigger || currentLeftTrigger;
         currentRightTrigger = false;
         currentLeftTrigger = false;
+
+        telemetry.update();
     }
 
     @Override
