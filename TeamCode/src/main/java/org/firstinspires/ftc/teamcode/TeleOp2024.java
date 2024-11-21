@@ -36,6 +36,11 @@ public class TeleOp2024 extends OpMode {
     boolean currentLeftTrigger = false;
     double rightTriggerValue = 0;
     double leftTriggerValue = 0;
+    boolean pastBumpered = false;
+    boolean currentRightBumper = false;
+    boolean currentLeftBumper = false;
+    boolean rightBumperValue = false;
+    boolean leftBumperValue = false;
 
     @Override
     public void start() {
@@ -68,23 +73,27 @@ public class TeleOp2024 extends OpMode {
         drive.calculatePower(new double[] {multiplier * gamepad1.left_stick_x, -multiplier * gamepad1.left_stick_y, multiplier * gamepad1.right_stick_x});
         drive.normalizePowers();
         drive.pushPowers();
-
-        currentD_Up = gamepad1.dpad_up;
-        if(currentD_Up && !pastD_Up) {
-            arm.movePower(true);
-        }else{
-            arm.stop();
-        }
-        pastD_Up = currentD_Up;
-
-        currentD_Down = gamepad1.dpad_down;
-        if(currentD_Down && !pastD_Down) {
-            arm.movePower(false);
-        }else{
-            arm.stop();
-        }
-        pastD_Down = currentD_Down;
 //
+//        currentD_Up = gamepad1.dpad_up;
+//        if(currentD_Up && !pastD_Up) {
+//            slide.movePower(true);
+//            telemetry.addData("D", slide);
+//        }else{
+//            slide.stop();
+//            telemetry.addData("STOP", slide);
+//        }
+//        pastD_Up = currentD_Up;
+//
+//        currentD_Down = gamepad1.dpad_down;
+//        if(currentD_Down && !pastD_Down) {
+//            slide.movePower(false);
+//            telemetry.addData("D", slide);
+//        }else{
+//            slide.stop();
+//            telemetry.addData("STOP", slide);
+//        }
+//        pastD_Down = currentD_Down;
+// aeoifj;eoifja;oewijf
 //        currentD_Down = gamepad1.dpad_down;
 //        if(currentD_Down && !pastD_Down) {
 //            intake.setState("intaking");
@@ -107,32 +116,66 @@ public class TeleOp2024 extends OpMode {
         leftTriggerValue = gamepad1.left_trigger;
         if(rightTriggerValue > 0.5) {
             currentRightTrigger = true;
-            telemetry.addData("RT", gamepad1.right_trigger);
+
         }
         else if(leftTriggerValue > 0.5) {
             currentLeftTrigger = true;
-            telemetry.addData("LT", gamepad1.left_trigger);
+
         }
-//        } else {
-//            arm.stop();
-//        }
 
         if(currentRightTrigger) {
             arm.movePower(true);
+            telemetry.addData("Rpower", arm);
         }
         else if(currentLeftTrigger) {
             arm.movePower(false);
+            telemetry.addData("Lpower", arm);
+
         }
 
         if(!(currentLeftTrigger || currentRightTrigger)) {
             if(!pastTriggered) {
                 arm.stop();
+                telemetry.addData("STOP", arm);
             }
         }
 
         pastTriggered = currentRightTrigger || currentLeftTrigger;
         currentRightTrigger = false;
         currentLeftTrigger = false;
+
+
+        rightBumperValue = gamepad1.right_bumper;
+        leftBumperValue = gamepad1.left_bumper;
+        if(rightBumperValue) {
+            currentRightBumper = true;
+
+        }
+        else if(leftBumperValue) {
+            currentLeftBumper = true;
+
+        }
+
+        if(currentRightBumper) {
+            slide.movePower(true);
+            telemetry.addData("RSpower", slide);
+        }
+        else if(currentLeftBumper) {
+            slide.movePower(false);
+            telemetry.addData("LSpower", slide);
+
+        }
+
+        if(!(currentLeftBumper || currentRightBumper)) {
+            if(!pastBumpered) {
+                slide.stop();
+                telemetry.addData("STOP", slide);
+            }
+        }
+
+        pastBumpered = currentRightBumper || currentLeftBumper;
+        currentRightBumper = false;
+        currentLeftBumper = false;
 
         telemetry.update();
     }
@@ -141,7 +184,7 @@ public class TeleOp2024 extends OpMode {
     public void stop() {
         drive.stop();
         arm.stop();
-//        slide.stop();
+        slide.stop();
         //intake.setState("off");
     }
 }
