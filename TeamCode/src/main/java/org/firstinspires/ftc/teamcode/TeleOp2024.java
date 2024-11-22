@@ -2,9 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-
-import org.firstinspires.ftc.teamcode.Arm;
-import org.firstinspires.ftc.teamcode.Slide;
 //import org.firstinspires.ftc.teamcode.Intake;
 
 @TeleOp(name = "Alpha", group = "competition")
@@ -12,14 +9,17 @@ public class TeleOp2024 extends OpMode {
     DriveTrain drive;
     Arm arm;
     Slide slide;
+    ArmServo1 armServo1;
     //Intake intake;
 
     boolean doneInit = false;
 
     boolean pastBack = false;
     //boolean currentBack;
-    //boolean pastA = false;
-    //boolean currentA;
+    boolean pastA = false;
+    boolean currentA;
+    boolean pastY = false;
+    boolean currentY;
     boolean pastB = false;
     boolean currentB;
     boolean pastD_Up = false;
@@ -42,10 +42,12 @@ public class TeleOp2024 extends OpMode {
     boolean rightBumperValue = false;
     boolean leftBumperValue = false;
 
+    boolean holdArm = false;
+
     @Override
     public void start() {
         while(!doneInit){}
-//        claw.close();
+//       claw.close();
         //intake.setState("off");
     }
 
@@ -54,6 +56,7 @@ public class TeleOp2024 extends OpMode {
         drive = new DriveTrain(hardwareMap, "fl", "fr", "bl", "br");
         arm = new Arm(hardwareMap, "am1", 10, 1100, 0.05);
         slide = new Slide(hardwareMap, "am2", 10, 1100, 0.05);
+        armServo1 = new ArmServo1(hardwareMap, "as1", 1, -1);
         //intake = new Intake(hardwareMap, "intMotor");
         doneInit = true;
     }
@@ -112,8 +115,8 @@ public class TeleOp2024 extends OpMode {
 //        }
 //        pastA = currentA;
 
-        rightTriggerValue = gamepad1.right_trigger;
-        leftTriggerValue = gamepad1.left_trigger;
+        rightTriggerValue = gamepad2.right_trigger;
+        leftTriggerValue = gamepad2.left_trigger;
         if(rightTriggerValue > 0.5) {
             currentRightTrigger = true;
 
@@ -145,8 +148,8 @@ public class TeleOp2024 extends OpMode {
         currentLeftTrigger = false;
 
 
-        rightBumperValue = gamepad1.right_bumper;
-        leftBumperValue = gamepad1.left_bumper;
+        rightBumperValue = gamepad2.right_bumper;
+        leftBumperValue = gamepad2.left_bumper;
         if(rightBumperValue) {
             currentRightBumper = true;
 
@@ -176,6 +179,39 @@ public class TeleOp2024 extends OpMode {
         pastBumpered = currentRightBumper || currentLeftBumper;
         currentRightBumper = false;
         currentLeftBumper = false;
+
+        if(gamepad2.dpad_down){ // hold arm if  dpad down is pressed
+            holdArm = true;
+        }
+
+        if(holdArm){ // hold arm
+            arm.carry();
+        }
+
+//        if(gamepad2.a) {
+//            armServo1.open();
+//            telemetry.addData("servo1up", armServo1);
+//        }
+//        else if(gamepad2.y) {
+//            armServo1.close();
+//            telemetry.addData("servo1down", armServo1);
+//        }else{
+//            armServo1.stop();
+//            telemetry.addData("servo1stop", armServo1);
+//
+//        }
+
+        currentA = gamepad2.a;
+        if(currentA && !pastA) {
+            armServo1.toggle();
+            telemetry.addData("toggle", armServo1);
+        }
+        else {
+            armServo1.stop();
+            telemetry.addData("toggleOff", armServo1);
+        }
+        pastA = currentA;
+
 
         telemetry.update();
     }

@@ -19,6 +19,9 @@ public class Arm {
     public final double TARGET_INCREMENT;
     public final double MAX_POSITION;
 
+    public double startPosition;
+    public double endPosition;
+
     public Arm(HardwareMap map, String armName, double positionIncrement, double maxPosition, double powerIncrement) {
         armMotor = map.get(DcMotorEx.class, armName);
 
@@ -28,16 +31,19 @@ public class Arm {
 
 
         TARGET_INCREMENT = positionIncrement;
-        MAX_POSITION = maxPosition;
+        MAX_POSITION = maxPosition; // sets max position for motor FOR AUTO
         this.powerIncrement = powerIncrement;
 
         positionModifier = armMotor.getCurrentPosition();
         targetPosition = getCurrentPosition();
 
+        startPosition = getCurrentPosition(); // set startPosition to start position of motor
+        endPosition = startPosition+1100; // create endPosition to create a max/min range of motor movement. FOR TELEOP
+
         armMotorCurrentPower = 0;
     }
 
-    public void moveVelocity(double velocity) {
+    public void moveVelocity(double velocity) { // auto set velocity function
         if((velocity > 0 && getCurrentPosition() > MAX_POSITION) || (velocity < 0 && getCurrentPosition() < -50)) {
             armMotor.setVelocity(1);
         }
@@ -46,12 +52,18 @@ public class Arm {
         }
     }
 
-    public void movePower(boolean direction){
+    public void movePower(boolean direction){ // teleop move function
         if(direction){
-            armMotor.setPower(0.5);
+//            if(this.getCurrentPosition() > endPosition){
+//                armMotor.setPower(-0.3);
+//            }
+            armMotor.setPower(-0.3);
 
         } else {
-            armMotor.setPower(-0.5);
+//            if(this.getCurrentPosition() < startPosition){
+//                armMotor.setPower(0.3);
+//            }
+            armMotor.setPower(0.3);
 
         }
     }
@@ -98,12 +110,16 @@ public class Arm {
     }
 
     //Value set to hold
-    public void hold()
+    public void hold()// normal hold function
     {
-        armMotor.setPower(0.05);
-
+        armMotor.setPower(0.1);
     }
 
+    public void carry()//used after teleop to hang
+    {
+        armMotor.setPower(0.1);
+
+    }
     //Stops
     public void stop(){
         armMotor.setPower(0);
