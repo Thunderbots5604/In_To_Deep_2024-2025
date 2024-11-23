@@ -55,7 +55,7 @@ public class Arm {
 
     public void movePower(boolean direction){ // teleop move function
         if(direction){
-            if(this.getCurrentPosition() > -3700){
+            if(this.getCurrentPosition() > -3900){
                 armMotor.setPower(-0.3);
             }
             else {

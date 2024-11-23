@@ -73,9 +73,9 @@ public class TeleOp2024 extends OpMode {
         slide = new Slide(hardwareMap, "am2", 10, 1100, 0.05);
 //        armServo1 = new ArmServo1(hardwareMap, "as1", 1, -1);
         claw1 = new Claw(hardwareMap, "claw1", 0.2, 0.6);
-        claw2 = new Claw(hardwareMap, "claw2", 50, 250);
+        claw2 = new Claw(hardwareMap, "claw2", 0, 0.7);
         claw3 = new Claw(hardwareMap, "claw3", 0.4, 0);
-        claw4 = new Claw(hardwareMap, "claw4", 50, 250);
+        claw4 = new Claw(hardwareMap, "claw4", 0, 0.25);
 
         //intake = new Intake(hardwareMap, "intMotor");
         doneInit = true;
