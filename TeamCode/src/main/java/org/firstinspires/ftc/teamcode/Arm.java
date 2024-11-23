@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class Arm {
     private DcMotorEx armMotor;
@@ -38,7 +39,7 @@ public class Arm {
         targetPosition = getCurrentPosition();
 
         startPosition = getCurrentPosition(); // set startPosition to start position of motor
-        endPosition = startPosition+1100; // create endPosition to create a max/min range of motor movement. FOR TELEOP
+        endPosition = startPosition-50; // create endPosition to create a max/min range of motor movement. FOR TELEOP
 
         armMotorCurrentPower = 0;
     }
@@ -54,16 +55,22 @@ public class Arm {
 
     public void movePower(boolean direction){ // teleop move function
         if(direction){
-//            if(this.getCurrentPosition() > endPosition){
-//                armMotor.setPower(-0.3);
-//            }
-            armMotor.setPower(-0.3);
+            if(this.getCurrentPosition() > -3700){
+                armMotor.setPower(-0.3);
+            }
+            else {
+                armMotor.setPower(0);
+            }
+//            armMotor.setPower(-0.3);
 
         } else {
-//            if(this.getCurrentPosition() < startPosition){
-//                armMotor.setPower(0.3);
-//            }
-            armMotor.setPower(0.3);
+            if(this.getCurrentPosition() < 0){
+                armMotor.setPower(0.3);
+            } else {
+                armMotor.setPower(0);
+            }
+//            armMotor.setPower(0.3);
+
 
         }
     }
@@ -117,7 +124,13 @@ public class Arm {
 
     public void carry()//used after teleop to hang
     {
-        armMotor.setPower(0.1);
+        ElapsedTime timer = new ElapsedTime();
+        timer.reset();
+        while(timer.milliseconds() < 5000) {
+            armMotor.setPower(0.1);
+        }
+        armMotor.setPower(0);
+
 
     }
     //Stops

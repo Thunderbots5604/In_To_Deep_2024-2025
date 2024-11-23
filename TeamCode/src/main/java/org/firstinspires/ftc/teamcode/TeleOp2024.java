@@ -10,6 +10,11 @@ public class TeleOp2024 extends OpMode {
     Arm arm;
     Slide slide;
     ArmServo1 armServo1;
+    Claw claw1;
+    Claw claw2;
+    Claw claw3;
+    Claw claw4;
+
     //Intake intake;
 
     boolean doneInit = false;
@@ -20,6 +25,8 @@ public class TeleOp2024 extends OpMode {
     boolean currentA;
     boolean pastY = false;
     boolean currentY;
+    boolean pastX = false;
+    boolean currentX;
     boolean pastB = false;
     boolean currentB;
     boolean pastD_Up = false;
@@ -42,12 +49,20 @@ public class TeleOp2024 extends OpMode {
     boolean rightBumperValue = false;
     boolean leftBumperValue = false;
 
+//    boolean pastServo1ed = false;
+
     boolean holdArm = false;
 
     @Override
     public void start() {
         while(!doneInit){}
-//       claw.close();
+        claw1.open();
+        claw2.close();
+        claw3.close();
+        claw4.close();
+        arm.setZeroPosition();
+        slide.setZeroPosition();
+
         //intake.setState("off");
     }
 
@@ -56,7 +71,12 @@ public class TeleOp2024 extends OpMode {
         drive = new DriveTrain(hardwareMap, "fl", "fr", "bl", "br");
         arm = new Arm(hardwareMap, "am1", 10, 1100, 0.05);
         slide = new Slide(hardwareMap, "am2", 10, 1100, 0.05);
-        armServo1 = new ArmServo1(hardwareMap, "as1", 1, -1);
+//        armServo1 = new ArmServo1(hardwareMap, "as1", 1, -1);
+        claw1 = new Claw(hardwareMap, "claw1", 0.2, 0.6);
+        claw2 = new Claw(hardwareMap, "claw2", 50, 250);
+        claw3 = new Claw(hardwareMap, "claw3", 0.4, 0);
+        claw4 = new Claw(hardwareMap, "claw4", 50, 250);
+
         //intake = new Intake(hardwareMap, "intMotor");
         doneInit = true;
     }
@@ -128,18 +148,15 @@ public class TeleOp2024 extends OpMode {
 
         if(currentRightTrigger) {
             arm.movePower(true);
-            telemetry.addData("Rpower", arm);
         }
         else if(currentLeftTrigger) {
             arm.movePower(false);
-            telemetry.addData("Lpower", arm);
 
         }
 
         if(!(currentLeftTrigger || currentRightTrigger)) {
             if(!pastTriggered) {
                 arm.stop();
-                telemetry.addData("STOP", arm);
             }
         }
 
@@ -161,18 +178,15 @@ public class TeleOp2024 extends OpMode {
 
         if(currentRightBumper) {
             slide.movePower(true);
-            telemetry.addData("RSpower", slide);
         }
         else if(currentLeftBumper) {
             slide.movePower(false);
-            telemetry.addData("LSpower", slide);
 
         }
 
         if(!(currentLeftBumper || currentRightBumper)) {
             if(!pastBumpered) {
                 slide.stop();
-                telemetry.addData("STOP", slide);
             }
         }
 
@@ -187,31 +201,58 @@ public class TeleOp2024 extends OpMode {
         if(holdArm){ // hold arm
             arm.carry();
         }
-
-//        if(gamepad2.a) {
+//
+//        currentA = gamepad2.a;
+//        currentY = gamepad2.y;
+//        if(currentA) {
 //            armServo1.open();
 //            telemetry.addData("servo1up", armServo1);
 //        }
-//        else if(gamepad2.y) {
+//        else if(currentY) {
 //            armServo1.close();
 //            telemetry.addData("servo1down", armServo1);
-//        }else{
-//            armServo1.stop();
-//            telemetry.addData("servo1stop", armServo1);
-//
 //        }
+//
+//        if(!(currentA || currentY)) {
+//            if(!pastServo1ed) {
+//                armServo1.stop();
+//                telemetry.addData("servo1stop", armServo1);
+//            }
+//        }
+//
+//        pastServo1ed = currentA || currentY;
+//        currentA = false;
+//        currentY = false;
+
+        currentB = gamepad2.b;
+        if(currentB && !pastB) {
+            claw1.toggle(); // claw 1 is 1st servo on vertical arm
+
+        }
+        pastB = currentB;
+
+
+        currentX = gamepad2.x;
+        if(currentX && !pastX) {
+            claw2.toggle();
+        }
+        pastX = currentX;
+
+
+        currentY = gamepad2.y;
+        if(currentY && !pastY) {
+            claw3.toggle(); // claw that opens the door
+        }
+        pastY = currentY;
 
         currentA = gamepad2.a;
         if(currentA && !pastA) {
-            armServo1.toggle();
-            telemetry.addData("toggle", armServo1);
-        }
-        else {
-            armServo1.stop();
-            telemetry.addData("toggleOff", armServo1);
+            claw4.toggle();
         }
         pastA = currentA;
 
+        telemetry.addData("arm Position", arm.getCurrentPosition());
+        telemetry.addData("arm 2 Position", slide.getCurrentPosition());
 
         telemetry.update();
     }

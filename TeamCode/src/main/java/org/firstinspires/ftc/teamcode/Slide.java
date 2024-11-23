@@ -56,11 +56,23 @@ public class Slide {
 
     public void movePower(boolean direction){
         if(direction){
+            if(this.getCurrentPosition() > -2000){
+                armMotor2.setPower(-0.5);
+            }
+            else {
+                armMotor2.setPower(0);
+            }
+//            armMotor2.setPower(-0.3);
 
-            armMotor2.setPower(0.3);
         } else {
+            if(this.getCurrentPosition() < 0){
+                armMotor2.setPower(0.5);
+            } else {
+                armMotor2.setPower(0);
+            }
+//            armMotor2.setPower(0.3);
 
-            armMotor2.setPower(-0.3);
+
         }
     }
     public void lock() {

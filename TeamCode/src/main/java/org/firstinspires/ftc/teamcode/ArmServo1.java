@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.ServoController;
 
 
 public class ArmServo1 {
@@ -27,17 +28,18 @@ public class ArmServo1 {
     }
 
     public void close() {
-        servo.setPosition(CLOSE_POSITION);
+        servo.setPosition(0);
         open = false;
     }
 
     public void open() {
-        servo.setPosition(OPEN_POSITION);
+        servo.setPosition(1);
         open = true;
     }
 
     public void stop() {
-        servo.setPosition(0);
+
+        servo.setPosition(0.5);
     }
 
     public boolean isOpen() {

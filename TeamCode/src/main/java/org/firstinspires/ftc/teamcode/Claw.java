@@ -2,16 +2,17 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.ServoController;
 
 
-public class ArmServo2 {
+public class Claw {
     private final double OPEN_POSITION;
     private final double CLOSE_POSITION;
     private boolean open;
-    private Servo servo2;
+    private Servo claw;
 
-    public ArmServo2(HardwareMap map, String name, double openPosition, double closePosition) {
-        servo2 = map.get(Servo.class, name);
+    public Claw(HardwareMap map, String name, double openPosition, double closePosition) {
+        claw = map.get(Servo.class, name);
 
         OPEN_POSITION = openPosition;
         CLOSE_POSITION = closePosition;
@@ -19,27 +20,26 @@ public class ArmServo2 {
 
     public void toggle() {
         if(!open) {
-            open();
+            this.open();
         }
         else {
-            close();
+            this.close();
         }
     }
 
     public void close() {
-        servo2.setPosition(CLOSE_POSITION);
+        claw.setPosition(CLOSE_POSITION);
         open = false;
     }
 
     public void open() {
-        servo2.setPosition(OPEN_POSITION);
+        claw.setPosition(OPEN_POSITION);
         open = true;
     }
-
-    public void stop() {
-        servo2.setPosition(0);
-        open = false;
-    }
+//
+//    public void stop() {
+//        claw.setPosition(0);
+//    }
 
     public boolean isOpen() {
         return open;
