@@ -56,8 +56,8 @@ public class Slide {
 
     public void movePower(boolean direction){
         if(direction){
-            if(this.getCurrentPosition() > -2000){
-                armMotor2.setPower(-0.5);
+            if(this.getCurrentPosition() > -1500){
+                armMotor2.setPower(-0.75);
             }
             else {
                 armMotor2.setPower(0);
@@ -66,7 +66,7 @@ public class Slide {
 
         } else {
             if(this.getCurrentPosition() < 0){
-                armMotor2.setPower(0.5);
+                armMotor2.setPower(0.75);
             } else {
                 armMotor2.setPower(0);
             }

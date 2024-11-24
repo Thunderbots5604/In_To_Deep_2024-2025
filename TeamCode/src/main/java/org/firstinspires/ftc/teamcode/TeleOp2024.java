@@ -29,6 +29,9 @@ public class TeleOp2024 extends OpMode {
     boolean currentX;
     boolean pastB = false;
     boolean currentB;
+    boolean pastB2 = false;
+    boolean currentB2;
+
     boolean pastD_Up = false;
     boolean currentD_Up;
     boolean pastD_Down = false;
@@ -57,7 +60,7 @@ public class TeleOp2024 extends OpMode {
     public void start() {
         while(!doneInit){}
         claw1.open();
-        claw2.close();
+        claw2.open();
         claw3.close();
         claw4.close();
         arm.setZeroPosition();
@@ -72,8 +75,8 @@ public class TeleOp2024 extends OpMode {
         arm = new Arm(hardwareMap, "am1", 10, 1100, 0.05);
         slide = new Slide(hardwareMap, "am2", 10, 1100, 0.05);
 //        armServo1 = new ArmServo1(hardwareMap, "as1", 1, -1);
-        claw1 = new Claw(hardwareMap, "claw1", 0.2, 0.6);
-        claw2 = new Claw(hardwareMap, "claw2", 0, 0.7);
+        claw1 = new Claw(hardwareMap, "claw1", 0.27, 0.6);
+        claw2 = new Claw(hardwareMap, "claw2", 0.8,0.1);
         claw3 = new Claw(hardwareMap, "claw3", 0.4, 0);
         claw4 = new Claw(hardwareMap, "claw4", 0, 0.25);
 
@@ -84,13 +87,18 @@ public class TeleOp2024 extends OpMode {
     @Override
     public void loop() {
 
-        currentB = gamepad1.b;
-        if(currentB && !pastB) {
+        currentB2 = gamepad1.b;
+        if(currentB2 && !pastB) {
             halfSpeed = !halfSpeed;
         }
-        pastB = currentB;
+        pastB2 = currentB2;
 
-        multiplier = halfSpeed ? 0.1 : 0.3;
+        if(halfSpeed) {
+            multiplier = 0.1;
+        }else{
+            multiplier = 0.3;
+        }
+        telemetry.addData("half speed", halfSpeed);
 
         drive.setPowersToZero();
         drive.calculatePower(new double[] {multiplier * gamepad1.left_stick_x, -multiplier * gamepad1.left_stick_y, multiplier * gamepad1.right_stick_x});
