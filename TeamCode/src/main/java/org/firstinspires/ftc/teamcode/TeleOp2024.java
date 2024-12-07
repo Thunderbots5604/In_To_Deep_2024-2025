@@ -73,8 +73,8 @@ public class TeleOp2024 extends OpMode {
     public void init() {
         drive = new DriveTrain(hardwareMap, "fl", "fr", "bl", "br");
         arm = new Arm(hardwareMap, "am1", 10, 1100, 0.05);
-        slide = new Slide(hardwareMap, "am2", 10, 1100, 0.05);
-//        armServo1 = new ArmServo1(hardwareMap, "as1", 1, -1);
+//        slide = new Slide(hardwareMap, "am2", 10, 1100, 0.05);
+        armServo1 = new ArmServo1(hardwareMap, "claw5", 0, 1000);
         claw1 = new Claw(hardwareMap, "claw1", 0.27, 0.6);
         claw2 = new Claw(hardwareMap, "claw2", 0.8,0.1);
         claw3 = new Claw(hardwareMap, "claw3", 0.4, 0);
@@ -185,16 +185,15 @@ public class TeleOp2024 extends OpMode {
         }
 
         if(currentRightBumper) {
-            slide.movePower(true);
+            armServo1.movePower(true);
         }
         else if(currentLeftBumper) {
-            slide.movePower(false);
-
+            armServo1.movePower(false);
         }
 
         if(!(currentLeftBumper || currentRightBumper)) {
             if(!pastBumpered) {
-                slide.stop();
+                armServo1.stop();
             }
         }
 
@@ -260,7 +259,7 @@ public class TeleOp2024 extends OpMode {
         pastA = currentA;
 
         telemetry.addData("arm Position", arm.getCurrentPosition());
-        telemetry.addData("arm 2 Position", slide.getCurrentPosition());
+        telemetry.addData("arm 2 Position", armServo1.getCurrentPosition());
 
         telemetry.update();
     }
@@ -269,7 +268,7 @@ public class TeleOp2024 extends OpMode {
     public void stop() {
         drive.stop();
         arm.stop();
-        slide.stop();
+//        slide.stop();
         //intake.setState("off");
     }
 }
