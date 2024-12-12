@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 //import org.firstinspires.ftc.teamcode.Intake;
 
 @TeleOp(name = "Alpha", group = "competition")
@@ -14,9 +15,12 @@ public class TeleOp2024 extends OpMode {
     Claw claw2;
     Claw claw3;
     Claw claw4;
+//    Claw claw5;
 
     //Intake intake;
 
+    int loopNum = 0;
+    int loopHold = -1;
     boolean doneInit = false;
 
     boolean pastBack = false;
@@ -62,9 +66,11 @@ public class TeleOp2024 extends OpMode {
         claw1.open();
         claw2.open();
         claw3.close();
-        claw4.close();
+        claw4.open();
+//        claw5.close();
         arm.setZeroPosition();
-        slide.setZeroPosition();
+        armServo1.zeroEncoder();
+//        slide.setZeroPosition();
 
         //intake.setState("off");
     }
@@ -76,9 +82,10 @@ public class TeleOp2024 extends OpMode {
 //        slide = new Slide(hardwareMap, "am2", 10, 1100, 0.05);
         armServo1 = new ArmServo1(hardwareMap, "claw5", 0, 1000);
         claw1 = new Claw(hardwareMap, "claw1", 0.27, 0.6);
-        claw2 = new Claw(hardwareMap, "claw2", 0.8,0.1);
+        claw2 = new Claw(hardwareMap, "claw2", 0.9,0);
         claw3 = new Claw(hardwareMap, "claw3", 0.4, 0);
-        claw4 = new Claw(hardwareMap, "claw4", 0, 0.25);
+        claw4 = new Claw(hardwareMap, "claw4", 0.15, 0);
+//        claw5 = new Claw(hardwareMap, "claw5", 0, 0.268);
 
         //intake = new Intake(hardwareMap, "intMotor");
         doneInit = true;
@@ -175,13 +182,20 @@ public class TeleOp2024 extends OpMode {
 
         rightBumperValue = gamepad2.right_bumper;
         leftBumperValue = gamepad2.left_bumper;
+
+//        if(rightBumperValue) {
+//            claw5.open();
+//        }else{
+//            claw5.close();
+//        }
+
+
         if(rightBumperValue) {
             currentRightBumper = true;
 
         }
         else if(leftBumperValue) {
             currentLeftBumper = true;
-
         }
 
         if(currentRightBumper) {
@@ -233,7 +247,7 @@ public class TeleOp2024 extends OpMode {
 
         currentB = gamepad2.b;
         if(currentB && !pastB) {
-            claw1.toggle(); // claw 1 is 1st servo on vertical arm
+            claw1.toggle(); // claw 1 is 1st servo on vertical arm port 0
 
         }
         pastB = currentB;
@@ -241,26 +255,33 @@ public class TeleOp2024 extends OpMode {
 
         currentX = gamepad2.x;
         if(currentX && !pastX) {
-            claw2.toggle();
+            claw2.toggle(); //flip input down port 1
         }
         pastX = currentX;
 
 
         currentY = gamepad2.y;
         if(currentY && !pastY) {
-            claw3.toggle(); // claw that opens the door
+            claw3.toggle(); // claw that opens the door port 2
         }
         pastY = currentY;
 
         currentA = gamepad2.a;
         if(currentA && !pastA) {
-            claw4.toggle();
+            claw4.toggle(); // claw claw port 3
+//            loopHold = loopNum+180;
         }
         pastA = currentA;
+//
+//        if(loopHold == loopNum) {
+//            claw4.toggle();
+//            loopHold=-1;
+//        }
+
 
         telemetry.addData("arm Position", arm.getCurrentPosition());
         telemetry.addData("arm 2 Position", armServo1.getCurrentPosition());
-
+//        loopNum++;
         telemetry.update();
     }
 

@@ -8,31 +8,31 @@ public class ArmServo1 {
     private final int MAX_POSITION; // Maximum encoder count (software limit)
     private final int MIN_POSITION; // Minimum encoder count (software limit)
     private int currentPosition;    // Current encoder count
-    private CRServo servo;          // Continuous Rotation Servo
+    private CRServo servo;
     private int encoderOffset;      // Offset for zeroing encoder values
 
     public ArmServo1(HardwareMap map, String name, int minPosition, int maxPosition) {
         servo = map.get(CRServo.class, name);
         this.MIN_POSITION = minPosition;
         this.MAX_POSITION = maxPosition;
-        this.currentPosition = 0; // Default initial position
-        this.encoderOffset = 0;  // Encoder offset for recalibration
+        this.currentPosition = 0;
+        this.encoderOffset = 0;
     }
 
-    // set the current encoder position to 0
     public void zeroEncoder() {
-        encoderOffset = getRawEncoder();
         currentPosition = 0;
     }
 
 
     public void movePower(boolean forward) {
-        updateEncoder(); // update current position from encoder
+//        updateEncoder(); // update current position from encoder
 
-        if (forward && currentPosition < MAX_POSITION) {
-            servo.setPower(1.0);
-        } else if (!forward && currentPosition > MIN_POSITION) {
-            servo.setPower(-1.0);
+        if (forward ) { //&& currentPosition < MAX_POSITION
+            servo.setPower(-0.2);
+            addTick();
+        } else if (!forward ) { //&& currentPosition > MIN_POSITION
+            servo.setPower(0.2);
+            subTick();
         } else {
             stop(); // Stop movement if at limits
         }
@@ -43,19 +43,16 @@ public class ArmServo1 {
         servo.setPower(0.0);
     }
 
-    // updates the current position based on the encoder value
-    private void updateEncoder() {
-        currentPosition = getRawEncoder() - encoderOffset;
+    public void addTick() {
+        currentPosition++;
     }
 
-    //get raw encoder value
-    private int getRawEncoder() {
-        // Example: Replace with actual method to read encoder ticks
-        return this.getCurrentPosition();
+    public void subTick() {
+        currentPosition--;
     }
 
-    // return the current position
-    public int getCurrentPosition() {
+    public int getCurrentPosition(){
         return currentPosition;
     }
+
 }
