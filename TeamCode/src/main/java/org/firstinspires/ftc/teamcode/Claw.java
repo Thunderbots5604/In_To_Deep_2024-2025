@@ -10,12 +10,16 @@ public class Claw {
     private final double CLOSE_POSITION;
     private boolean open;
     private Servo claw;
+    private int position;
+    private double thirdPosition;
 
-    public Claw(HardwareMap map, String name, double openPosition, double closePosition) {
+    public Claw(HardwareMap map, String name, double openPosition, double closePosition, double thirdPosition) {
         claw = map.get(Servo.class, name);
 
         OPEN_POSITION = openPosition;
         CLOSE_POSITION = closePosition;
+        this.thirdPosition = thirdPosition;
+        position = 0;
     }
 
     public void toggle() {
@@ -35,6 +39,23 @@ public class Claw {
     public void open() {
         claw.setPosition(OPEN_POSITION);
         open = true;
+    }
+
+    public void moveThirdPosition() {
+        claw.setPosition(thirdPosition);
+    }
+
+    public void changePosition() {
+        if(position == 0){
+            this.open();
+            position=1;
+        }else if(position == 1){
+            this.moveThirdPosition();
+            position=2;
+        } else if(position == 2){
+            this.close();
+            position=0;
+        }
     }
 //
 //    public void stop() {
