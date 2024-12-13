@@ -20,7 +20,14 @@ public class TeleOp2024 extends OpMode {
     //Intake intake;
 
     int loopNum = 0;
-    int loopHold = -1;
+    int loopHold0 = -1;
+    int loopHold1 = -1;
+    int loopHold2 = -1;
+    int loopHold3 = -1;
+    int loopHold4 = -1;
+    int loopHold5 = -1;
+    int loopHold6 = -1;
+    int loopHold7 = -1;
     boolean doneInit = false;
 
     boolean pastBack = false;
@@ -63,7 +70,7 @@ public class TeleOp2024 extends OpMode {
     @Override
     public void start() {
         while(!doneInit){}
-        claw1.open();
+        claw1.close();
         claw2.open();
         claw3.close();
         claw4.open();
@@ -81,10 +88,10 @@ public class TeleOp2024 extends OpMode {
         arm = new Arm(hardwareMap, "am1", 10, 1100, 0.05);
 //        slide = new Slide(hardwareMap, "am2", 10, 1100, 0.05);
         armServo1 = new ArmServo1(hardwareMap, "claw5", 0, 1000);
-        claw1 = new Claw(hardwareMap, "claw1", 0.27, 0.6);
-        claw2 = new Claw(hardwareMap, "claw2", 0.9,0);
-        claw3 = new Claw(hardwareMap, "claw3", 0.4, 0);
-        claw4 = new Claw(hardwareMap, "claw4", 0.15, 0);
+        claw1 = new Claw(hardwareMap, "claw1", 0, 0.8,0);
+        claw2 = new Claw(hardwareMap, "claw2", 0.79,0,0.25);
+        claw3 = new Claw(hardwareMap, "claw3", 0.65, 0.85,0);
+        claw4 = new Claw(hardwareMap, "claw4", 0.15, 0,0);
 //        claw5 = new Claw(hardwareMap, "claw5", 0, 0.268);
 
         //intake = new Intake(hardwareMap, "intMotor");
@@ -149,6 +156,28 @@ public class TeleOp2024 extends OpMode {
 //            claw.toggle();
 //        }
 //        pastA = currentA;
+
+
+        currentD_Right = gamepad2.dpad_right;
+        if(currentD_Right && pastD_Right){
+            claw2.open();
+            loopHold0 = loopNum+120;
+            loopHold1 = loopNum+300;
+            loopHold2 = loopNum+480;
+            loopHold3 = loopNum+600;
+            loopHold4 = loopNum+750;
+
+//            claw1.open();
+//            claw1.close();
+//            claw2.close();
+//            claw3.open();
+//            claw1.open();
+            telemetry.addData("transferfunction", true);
+
+        }
+        pastD_Right = currentD_Right;
+
+
 
         rightTriggerValue = gamepad2.right_trigger;
         leftTriggerValue = gamepad2.left_trigger;
@@ -255,33 +284,51 @@ public class TeleOp2024 extends OpMode {
 
         currentX = gamepad2.x;
         if(currentX && !pastX) {
-            claw2.toggle(); //flip input down port 1
+            claw2.changePosition(); //flip input down port 1
         }
         pastX = currentX;
 
 
         currentY = gamepad2.y;
         if(currentY && !pastY) {
-            claw3.toggle(); // claw that opens the door port 2
+            claw3.toggle(); // claw for vertical arm
         }
         pastY = currentY;
 
         currentA = gamepad2.a;
         if(currentA && !pastA) {
             claw4.toggle(); // claw claw port 3
-//            loopHold = loopNum+180;
         }
         pastA = currentA;
-//
-//        if(loopHold == loopNum) {
-//            claw4.toggle();
-//            loopHold=-1;
-//        }
 
+
+        if(loopHold0 == loopNum) {
+            claw1.open();
+            loopHold0=-1;
+        }
+        if(loopHold1 == loopNum) {
+            claw1.close();
+            loopHold1=-1;
+        }
+        if(loopHold2 == loopNum) {
+            claw2.close();
+            loopHold2=-1;
+        }
+        if(loopHold3 == loopNum) {
+            claw3.open();
+            loopHold3=-1;
+        }
+        if(loopHold4 == loopNum) {
+            claw1.open();
+            loopHold4=-1;
+        }
+        if(loopHold5 == loopNum) {
+            loopHold5=-1;
+        }
 
         telemetry.addData("arm Position", arm.getCurrentPosition());
         telemetry.addData("arm 2 Position", armServo1.getCurrentPosition());
-//        loopNum++;
+        loopNum++;
         telemetry.update();
     }
 
