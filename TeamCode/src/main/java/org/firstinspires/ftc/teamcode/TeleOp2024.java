@@ -70,9 +70,9 @@ public class TeleOp2024 extends OpMode {
     @Override
     public void start() {
         while(!doneInit){}
-        claw1.close();
-        claw2.open();
-        claw3.close();
+        claw1.open(); //vertical flip
+        claw2.open(); // horizontal flip
+        claw3.close(); //
         claw4.open();
 //        claw5.close();
         arm.setZeroPosition();
@@ -88,8 +88,9 @@ public class TeleOp2024 extends OpMode {
         arm = new Arm(hardwareMap, "am1", 10, 1100, 0.05);
 //        slide = new Slide(hardwareMap, "am2", 10, 1100, 0.05);
         armServo1 = new ArmServo1(hardwareMap, "claw5", 0, 1000);
-        claw1 = new Claw(hardwareMap, "claw1", 0, 0.8,0);
-        claw2 = new Claw(hardwareMap, "claw2", 0.79,0,0.25);
+//        claw1 = new Claw(hardwareMap, "claw1", 0.8, 1,0);
+        claw1 = new Claw(hardwareMap, "claw1", 0,0.43,0.05);
+        claw2 = new Claw(hardwareMap, "claw2", 0.78,0,0.25);
         claw3 = new Claw(hardwareMap, "claw3", 0.65, 0.85,0);
         claw4 = new Claw(hardwareMap, "claw4", 0.15, 0,0);
 //        claw5 = new Claw(hardwareMap, "claw5", 0, 0.268);
@@ -110,7 +111,7 @@ public class TeleOp2024 extends OpMode {
         if(halfSpeed) {
             multiplier = 0.1;
         }else{
-            multiplier = 0.3;
+            multiplier = 0.6;
         }
         telemetry.addData("half speed", halfSpeed);
 
@@ -156,13 +157,12 @@ public class TeleOp2024 extends OpMode {
 //            claw.toggle();
 //        }
 //        pastA = currentA;
-
-
+//
+//
         currentD_Right = gamepad2.dpad_right;
         if(currentD_Right && pastD_Right){
-            claw2.open();
-            loopHold0 = loopNum+120;
-            loopHold1 = loopNum+300;
+            loopHold0 = loopNum+100;
+            loopHold1 = loopNum+200;
             loopHold2 = loopNum+480;
             loopHold3 = loopNum+600;
             loopHold4 = loopNum+750;
@@ -176,7 +176,7 @@ public class TeleOp2024 extends OpMode {
 
         }
         pastD_Right = currentD_Right;
-
+//
 
 
         rightTriggerValue = gamepad2.right_trigger;
@@ -276,7 +276,7 @@ public class TeleOp2024 extends OpMode {
 
         currentB = gamepad2.b;
         if(currentB && !pastB) {
-            claw1.toggle(); // claw 1 is 1st servo on vertical arm port 0
+            claw1.changePosition(); // claw 1 is 1st servo on vertical arm port 0
 
         }
         pastB = currentB;
@@ -298,28 +298,27 @@ public class TeleOp2024 extends OpMode {
         currentA = gamepad2.a;
         if(currentA && !pastA) {
             claw4.toggle(); // claw claw port 3
+            claw3.toggle();
         }
         pastA = currentA;
 
 
         if(loopHold0 == loopNum) {
-            claw1.open();
+
             loopHold0=-1;
         }
         if(loopHold1 == loopNum) {
-            claw1.close();
+
             loopHold1=-1;
         }
         if(loopHold2 == loopNum) {
-            claw2.close();
             loopHold2=-1;
         }
         if(loopHold3 == loopNum) {
-            claw3.open();
+
             loopHold3=-1;
         }
         if(loopHold4 == loopNum) {
-            claw1.open();
             loopHold4=-1;
         }
         if(loopHold5 == loopNum) {

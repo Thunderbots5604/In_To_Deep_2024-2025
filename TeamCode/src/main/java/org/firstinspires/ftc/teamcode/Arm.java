@@ -56,16 +56,16 @@ public class Arm {
     public void movePower(boolean direction){ // teleop move function
         if(direction){
             if(this.getCurrentPosition() > -4100){
-                armMotor.setPower(-0.3);
+                armMotor.setPower(-0.5);
             }
             else {
-                armMotor.setPower(0.05);
+                armMotor.setPower(-0.05);
             }
 //            armMotor.setPower(-0.3);
 
         } else {
             if(this.getCurrentPosition() < 0){
-                armMotor.setPower(0.3);
+                armMotor.setPower(0.5);
             } else {
                 armMotor.setPower(0);
             }
@@ -82,14 +82,14 @@ public class Arm {
 
         actualPosition = getCurrentPosition();
         if (actualPosition < targetPosition + 10 && actualPosition > targetPosition - 10) {
-            armMotor.setVelocity(1);
+            armMotor.setPower(0.05);
             return true;
         } else if (actualPosition < targetPosition) {
-            armMotor.setVelocity(100);
+            armMotor.setPower(0.3);
 
             return false;
         } else {
-            armMotor.setVelocity(-100);
+            armMotor.setPower(-0.3);
 
             return false;
         }
@@ -127,9 +127,9 @@ public class Arm {
         ElapsedTime timer = new ElapsedTime();
         timer.reset();
         while(timer.milliseconds() < 5000) {
-            armMotor.setPower(0.1);
+            armMotor.setPower(0.05);
         }
-        armMotor.setPower(0);
+        armMotor.setPower(0.0);
 
 
     }
